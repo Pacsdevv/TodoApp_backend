@@ -1,4 +1,5 @@
 # Node
 node_modules/
+.env
 
 # proximamente otras cosas que no se xd
