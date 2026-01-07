@@ -3,26 +3,12 @@ import express, {
   type Request,
   type Response,
 } from "express";
-import { pool } from "./config/database.js";
-import UserRouter from "./modules/users/routes";
+import indexRoutes from "./modules/routes/index";
 
 const app = express();
 app.use(express.json());
+app.use(indexRoutes);
 
-app.get("/", async (req, res) => {
-  try {
-    const { rows } = await pool.query("SELECT NOW()");
-    res.json({
-      message: "ESM + Docker + PostgreSQL funcionando!",
-      db_time: rows[0].now,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: "DB no conectada" });
-  }
-});
-
-app.use(UserRouter);
 
 app.listen(3000, () => {
   console.log("Servidor corriendo en http://localhost:3000");

@@ -84,7 +84,6 @@ CREATE TRIGGER trg_todos_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION trigger_set_updated_at();
 
-
 DROP TRIGGER IF EXISTS trg_categories_updated_at ON categories;
 CREATE TRIGGER trg_categories_updated_at
     BEFORE UPDATE ON categories
