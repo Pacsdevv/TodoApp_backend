@@ -27,7 +27,13 @@ export const getCategoryById = async (id: number) => {
 
 export const updateCategory = async (id: number, body: { name?: string; description?: string; color?: string; }) => {
   
-  if (body.name && body.description && body.color === undefined) throw new Error("At least one field to update");
+ if (
+  body.name === undefined &&
+  body.description === undefined &&
+  body.color === undefined
+  ) {
+    throw new Error("At least one field to update");
+  }
 
   const updated = await categoryRepository.updateCategory(id, body);
 

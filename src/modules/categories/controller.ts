@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import * as categoryService from "./service";
+import { error } from "console";
 
 
 export const createCategory = async (req: Request, res: Response) => {
@@ -13,8 +14,12 @@ export const createCategory = async (req: Request, res: Response) => {
 
 
 export const getAllCategories = async (req: Request, res: Response) => {
-  const rows = await categoryService.getAllCategories();
-  res.send(rows);
+  try {
+    const rows = await categoryService.getAllCategories();
+    res.send(rows);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 
