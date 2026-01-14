@@ -7,6 +7,12 @@ export type CreateUserDto = {
 };
 
 
+export const createUser = async (body: CreateUserDto) => {
+  const user = await userRepository.createUser(body);
+  return user;
+};
+  
+
 export const getAllUsers = async () => {
   const users = await userRepository.getAllUsers();
   if (users.length === 0) {
@@ -17,8 +23,8 @@ export const getAllUsers = async () => {
 };
 
 
-export const createUser = async (body: CreateUserDto) => {
-  const user = await userRepository.createUser(body);
+export const getUserById = async (id: number) => {
+  const user = await userRepository.getUserById(id);
+    if (!user) throw new Error("User not found");
   return user;
 };
-  

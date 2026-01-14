@@ -1,5 +1,5 @@
 import * as categoryRepository from "./repository";
-
+import { getUserById } from "../users/repository";
 
 
 export const createCategory = async (body: { name: string; description?: string; user_id: number; color?: string; }) => {
@@ -14,13 +14,19 @@ export const getAllCategories = async () => {
 
 
 export const getCategoriesByUser = async (user_id: number) => {
-  return await categoryRepository.getCategoriesByUser(user_id);
-};
+    const todos = await categoryRepository.getCategoriesByUser(user_id);
+        if (todos.length === 0) {
+            const user = await getUserById(user_id);
+            if (!user) throw new Error("User not found");
+        return { message: `User ${user.name} with user_id ${user_id} has no categories` };
+        };
+
+  return todos;};
 
 
 export const getCategoryById = async (id: number) => {
   const category = await categoryRepository.getCategoryById(id);
-  if (!category) throw new Error("Category not found");
+    if (!category) throw new Error("Category not found");
   return category;
 };
 
@@ -33,19 +39,16 @@ export const updateCategory = async (id: number, body: { name?: string; descript
   body.color === undefined
   ) {
     throw new Error("At least one field to update");
-  }
+  };
 
   const updated = await categoryRepository.updateCategory(id, body);
-
-  if (!updated) throw new Error("Category not found");
-
+    if (!updated) throw new Error("Category not found");
   return updated;
-
 };
 
 
 export const deleteCategory = async (id: number) => {
   const deleted = await categoryRepository.deleteCategory(id);
-  if (!deleted) throw new Error("Category not found");
+    if (!deleted) throw new Error("Category not found");
   return deleted;
 };

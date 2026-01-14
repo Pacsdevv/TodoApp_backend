@@ -1,6 +1,5 @@
 import type { Request, Response } from "express";
 import * as categoryService from "./service";
-import { error } from "console";
 
 
 export const createCategory = async (req: Request, res: Response) => {
