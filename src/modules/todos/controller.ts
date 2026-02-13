@@ -1,6 +1,5 @@
 import type { Request, Response } from "express";
 import * as todoService from "./service";
-import { error } from "console";
 
 
 export const createTodo = async (req: Request, res: Response) => {

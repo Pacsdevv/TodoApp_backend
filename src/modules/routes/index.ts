@@ -1,12 +1,11 @@
 import { Router } from "express";
-import userRoutes from "../users/routes";
+import authRoutes from "../auth/routes";
 import categoryRoutes from "../categories/routes";
-import todoRoutes from "../todos/routes"
-
+import todoRoutes from "../todos/routes";
 
 const router = Router();
 
-router.use("/api/users", userRoutes);
+router.use("/api/auth", authRoutes);
 router.use("/api/categories", categoryRoutes);
 router.use("/api/todos", todoRoutes);
 

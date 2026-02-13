@@ -5,15 +5,12 @@
     "moduleResolution": "node",
     "rootDir": "./src",
     "outDir": "./dist",
-
     "strict": true,
     "esModuleInterop": true,
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
-
     "skipLibCheck": true,
     "types": ["node"],
-
     "sourceMap": true,
     "declaration": true
   },

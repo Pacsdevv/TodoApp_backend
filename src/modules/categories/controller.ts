@@ -1,62 +1,124 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import * as categoryService from "./service";
+import type { AuthRequest } from "../../lib/types";
+import { createError } from "../../middlewares/errorHandler";
 
-
-export const createCategory = async (req: Request, res: Response) => {
+export const createCategory = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const newCategory = await categoryService.createCategory(req.body);
-    res.status(201).json(newCategory);
+    const user_id = req.user!.user_id;
+    const newCategory = await categoryService.createCategory(req.body, user_id);
+
+    res.status(201).json({
+      message: "Category created successfully",
+      data: newCategory,
+    });
   } catch (err: any) {
-    res.status(400).json({ error: err.message });
+    next(err);
   }
 };
 
-
-export const getAllCategories = async (req: Request, res: Response) => {
+export const getAllCategories = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const rows = await categoryService.getAllCategories();
-    res.send(rows);
+    const user_id = req.user!.user_id;
+    const categories = await categoryService.getAllCategories(user_id);
+
+    res.status(200).json({
+      message: "Categories retrieved successfully",
+      data: categories,
+    });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 };
 
+// export const getCategoriesByUser = async (req: Request, res: Response) => {
+//   try {
+//     const categories = await categoryService.getCategoriesByUser(
+//       Number(req.params.userId)
+//     );
+//     res.json(categories);
+//   } catch (err: any) {
+//     res.status(500).json({ error: err.message });
+//   }
+// };
 
-export const getCategoriesByUser = async (req: Request, res: Response) => {
+export const getCategoryById = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const categories = await categoryService.getCategoriesByUser(parseInt(req.params.userId));
-    res.json(categories);
+    const user_id = req.user!.user_id;
+    const category_id = Number(req.params.id);
+    if (category_id < 1) {
+      throw createError("Invalid category id", 400);
+    }
+
+    const category = await categoryService.getCategoryById(
+      category_id,
+      user_id
+    );
+
+    res.status(200).json({
+      message: "Category retrieved successfully",
+      data: category,
+    });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 };
 
-
-export const getCategoryById = async (req: Request, res: Response) => {
+export const updateCategory = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const category = await categoryService.getCategoryById(parseInt(req.params.id));
-    res.json(category);
+    const user_id = req.user!.user_id;
+    const category_id = Number(req.params.id);
+    if (category_id < 1) {
+      throw createError("Invalid category id", 400);
+    }
+
+    const category = await categoryService.updateCategory(
+      category_id,
+      req.body,
+      user_id
+    );
+
+    res.status(200).json({
+      message: "Category updated successfully",
+      data: category,
+    });
   } catch (err: any) {
-    res.status(404).json({ error: err.message });
+    next(err);
   }
 };
 
-
-export const updateCategory = async (req: Request, res: Response) => {
+export const deleteCategory = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const updated = await categoryService.updateCategory(parseInt(req.params.id), req.body);
-    res.json(updated);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
-  }
-};
+    const user_id = req.user!.user_id;
+    const category_id = Number(req.params.id);
+    if (category_id < 1) {
+      throw createError("Invalid category id", 400);
+    }
 
+    await categoryService.deleteCategory(category_id, user_id);
 
-export const deleteCategory = async (req: Request, res: Response) => {
-  try {
-    const deleted = await categoryService.deleteCategory(parseInt(req.params.id));
-    res.json({ message: "Category deleted", deleted });
+    res.json({ message: "Category deleted" });
   } catch (err: any) {
-    res.status(404).json({ error: err.message });
+    next(err);
   }
 };
