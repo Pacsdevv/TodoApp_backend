@@ -10,7 +10,7 @@ export type LoginDTO = {
 };
 
 export type UserDTO = {
-  id: string;
+  id: number;
   name: string;
   email: string;
   created_at?: Date;

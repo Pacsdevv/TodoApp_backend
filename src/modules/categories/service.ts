@@ -4,14 +4,12 @@ import type {
   CreateCategoryDTO,
   UpdateCategoryDTO,
 } from "../../lib/dtos";
-import type { Category } from "../../lib/types";
 import { createError } from "../../middlewares/errorHandler";
 
 export const createCategory = async (
   body: CreateCategoryDTO,
   user_id: number
 ): Promise<CategoryDTO> => {
-  // if (!body.name || !user_id) throw new Error("name and user_id required");
   const category = await categoryRepository.createCategory({
     name: body.name,
     description: body.description,

@@ -1,5 +1,5 @@
 import * as todoRepository from "./repository";
-import { getUserById } from "../users/repository";
+import { getUserById } from "../auth/repository";
 
 export const createTodo = async (body: {
   title: string;
@@ -15,19 +15,6 @@ export const createTodo = async (body: {
 
 export const getAllTodos = async () => {
   const todos = await todoRepository.getAllTodos();
-
-  return todos;
-};
-
-export const getTodosByUser = async (user_id: number) => {
-  const todos = await todoRepository.getTodosByUser(user_id);
-  if (todos.length === 0) {
-    const user = await getUserById(user_id);
-    if (!user) throw new Error("User not found");
-    return {
-      message: `User ${user.name} with user_id ${user_id} has no todos`,
-    };
-  }
 
   return todos;
 };

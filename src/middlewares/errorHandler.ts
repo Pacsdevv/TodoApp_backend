@@ -5,16 +5,19 @@ export type AppError = Error & {
   statusCode?: number;
 };
 
-// Global error handler middleware
 export const errorHandler = (
   err: AppError,
   req: Request,
   res: Response,
   next: NextFunction
 ): void => {
-  console.error("Error:", err);
+  console.error("Error:", {
+    message: err.message,
+    stack: err.stack,
+    url: req.url,
+    method: req.method,
+  });
 
-  // Handle Zod validation errors
   if (err instanceof ZodError) {
     res.status(400).json({
       error: "Validation error",
@@ -23,7 +26,6 @@ export const errorHandler = (
     return;
   }
 
-  // Handle custom errors with status codes
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal server error";
 
@@ -32,7 +34,6 @@ export const errorHandler = (
   });
 };
 
-// Helper function to create custom errors
 export const createError = (message: string, statusCode: number): AppError => {
   const error = new Error(message) as AppError;
   error.statusCode = statusCode;

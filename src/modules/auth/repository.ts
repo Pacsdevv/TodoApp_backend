@@ -1,8 +1,8 @@
 import { pool } from "../../config/database";
+import type { RegisterDTO } from "../../lib/dtos";
 import type { User } from "../../lib/types";
-import type { CreateUserDto } from "./service";
 
-export const createUser = async (body: CreateUserDto): Promise<User> => {
+export const createUser = async (body: RegisterDTO): Promise<User> => {
   const { rows } = await pool.query(
     `INSERT INTO public.users ("name", "email", "password")
     VALUES ($1, $2, $3)

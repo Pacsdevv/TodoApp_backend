@@ -39,17 +39,6 @@ export const getAllCategories = async (
   }
 };
 
-// export const getCategoriesByUser = async (req: Request, res: Response) => {
-//   try {
-//     const categories = await categoryService.getCategoriesByUser(
-//       Number(req.params.userId)
-//     );
-//     res.json(categories);
-//   } catch (err: any) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
-
 export const getCategoryById = async (
   req: AuthRequest,
   res: Response,

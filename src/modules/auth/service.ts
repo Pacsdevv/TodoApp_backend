@@ -1,7 +1,7 @@
-import * as userRepository from "../users/repository";
+import * as userRepository from "./repository";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import type { LoginDTO, RegisterDTO, UserDTO } from "../../lib/dtos";
+import type { LoginDTO, RegisterDTO } from "../../lib/dtos";
 import { createError } from "../../middlewares/errorHandler";
 import type { AuthPayload, AuthResponse } from "../../lib/types";
 import { config } from "../../config";

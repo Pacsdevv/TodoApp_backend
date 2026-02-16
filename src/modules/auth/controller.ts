@@ -8,12 +8,14 @@ export const signUp = async (
   next: NextFunction
 ) => {
   try {
-    const user = await authService.signUp(req.body);
+    const result = await authService.signUp(req.body);
+    const { user, token } = result;
 
     return createSuccessResponse(res, {
       data: {
         message: "User registered successfully",
         user,
+        token,
       },
     });
   } catch (error: any) {
@@ -27,13 +29,14 @@ export const login = async (
   next: NextFunction
 ) => {
   try {
-    // const { email, password } = req.body;
-    const user = await authService.login(req.body);
+    const result = await authService.login(req.body);
+    const { user, token } = result;
 
     return createSuccessResponse(res.status(200), {
       data: {
         message: "Successful login!",
         user,
+        token,
       },
     });
   } catch (error: any) {

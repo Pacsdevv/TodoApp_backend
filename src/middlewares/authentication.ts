@@ -8,7 +8,7 @@ export const authenticate = (
   req: AuthRequest,
   res: Response,
   next: NextFunction
-): void => {
+) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -16,14 +16,14 @@ export const authenticate = (
       throw createError("No token provided", 401);
     }
 
-    const token = authHeader.substring(7);
+    const token = authHeader.split(" ")[1];
 
     const decoded = jwt.verify(token, config.jwtSecret) as AuthPayload;
 
     req.user = decoded;
 
     next();
-  } catch (error) {
-    next(error);
+  } catch {
+    return res.status(401).json({ message: "Unauthorized" });
   }
 };
