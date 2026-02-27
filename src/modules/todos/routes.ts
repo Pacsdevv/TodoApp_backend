@@ -1,13 +1,22 @@
 import { Router } from "express";
 import * as todoController from "./controller";
+import { authenticate } from "../../middlewares/authentication";
+import { schemaValidation } from "../../middlewares/validation";
+import { createTodoSchema, updateTodoSchema } from "./schemas";
 
 const router = Router();
 
-router.post("/", todoController.createTodo);
+router.use(authenticate);
+
+router.post("/", schemaValidation(createTodoSchema), todoController.createTodo);
 router.get("/", todoController.getAllTodos);
 router.get("/:id", todoController.getTodoById);
-router.get("/category/:categoryId", todoController.getTodosByCategoryId);
-router.put("/:id", todoController.updateTodo);
+router.get("/category/:id", todoController.getTodosByCategoryId);
+router.put(
+  "/:id",
+  schemaValidation(updateTodoSchema),
+  todoController.updateTodo
+);
 router.delete("/:id", todoController.deleteTodo);
 
 export default router;

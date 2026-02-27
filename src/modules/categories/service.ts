@@ -62,5 +62,6 @@ export const deleteCategory = async (
   user_id: number
 ): Promise<void> => {
   const deleted = await categoryRepository.deleteCategory(id, user_id);
+
   if (!deleted) throw createError("Category not found", 404);
 };

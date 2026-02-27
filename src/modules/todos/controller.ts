@@ -1,58 +1,135 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import * as todoService from "./service";
+import type { AuthRequest } from "../../lib/types";
+import { todo } from "node:test";
+import { nextTick } from "process";
+import { createError } from "../../middlewares/errorHandler";
 
-export const createTodo = async (req: Request, res: Response) => {
+export const createTodo = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const newTodo = await todoService.createTodo(req.body);
-    res.status(201).json(newTodo);
+    const user_id = req.user!.user_id;
+
+    const todo = await todoService.createTodo(req.body, user_id);
+
+    res.status(201).json({
+      message: "Todo created successfully",
+      data: todo,
+    });
   } catch (err: any) {
-    res.status(400).json({ error: err.message });
+    next(err);
   }
 };
 
-export const getAllTodos = async (req: Request, res: Response) => {
+export const getAllTodos = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const rows = await todoService.getAllTodos();
-    res.send(rows);
+    const user_id = req.user!.user_id;
+
+    const todos = await todoService.getAllTodos(user_id);
+
+    res.status(200).json({
+      message: "Todos retrieved successfully",
+      data: todos,
+    });
   } catch (err: any) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 };
 
-export const getTodoById = async (req: Request, res: Response) => {
+export const getTodoById = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const todo = await todoService.getTodoById(Number(req.params.id));
-    res.json(todo);
+    const user_id = req.user!.user_id;
+    const todo_id = Number(req.params.id);
+    if (todo_id < 1) {
+      throw createError("Invalid todo id", 400);
+    }
+
+    const todo = await todoService.getTodoById(todo_id, user_id);
+
+    res.status(200).json({
+      message: "Todo retrieved successfully",
+      data: todo,
+    });
   } catch (err: any) {
-    res.status(404).json({ error: err.message });
+    next(err);
   }
 };
 
-export const getTodosByCategoryId = async (req: Request, res: Response) => {
+export const getTodosByCategoryId = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const todos = await todoService.getTodosByCategoryId(
-      Number(req.params.categoryId)
-    );
-    res.json(todos);
+    const user_id = req.user!.user_id;
+    const category_id = Number(req.params.id);
+    if (category_id < 1) {
+      throw createError("Invalid category id", 400);
+    }
+
+    const todos = await todoService.getTodosByCategoryId(user_id, category_id);
+
+    res.status(200).json({
+      message: "Todos retrieved successfully",
+      data: todos,
+    });
   } catch (err: any) {
-    res.status(404).json({ error: err.message });
+    next(err);
   }
 };
 
-export const updateTodo = async (req: Request, res: Response) => {
+export const updateTodo = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const todo = await todoService.updateTodos(Number(req.params.id), req.body);
-    res.json(todo);
-  } catch (err: any) {
-    res.status(400).json({ error: err.message });
+    const user_id = req.user!.user_id;
+    const todo_id = Number(req.params.id);
+    if (todo_id < 1) {
+      throw createError("Invalid todo id", 400);
+    }
+
+    const todo = await todoService.updateTodo(todo_id, req.body, user_id);
+
+    res.status(200).json({
+      message: "Todo updated successfully",
+      data: todo,
+    });
+  } catch (error) {
+    next(error);
   }
 };
 
-export const deleteTodo = async (req: Request, res: Response) => {
+export const deleteTodo = async (
+  req: AuthRequest,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const deleted = await todoService.deleteTodo(Number(req.params.id));
-    res.json({ message: "Todo deleted", deleted });
-  } catch (err: any) {
-    res.status(404).json({ error: err.message });
+    const user_id = req.user!.user_id;
+    const todo_id = Number(req.params.id);
+    if (todo_id < 1) {
+      throw createError("Invalid todo id", 400);
+    }
+
+    await todoService.deleteTodo(todo_id, user_id);
+
+    res.status(200).json({
+      message: "Todo deleted successfully",
+    });
+  } catch (error) {
+    next(error);
   }
 };

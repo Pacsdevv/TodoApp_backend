@@ -1,8 +1,4 @@
-import express, {
-  type NextFunction,
-  type Request,
-  type Response,
-} from "express";
+import express from "express";
 import cors from "cors";
 import indexRoutes from "./modules/routes/index";
 import { errorHandler } from "./middlewares/errorHandler";
@@ -16,8 +12,3 @@ app.use(errorHandler);
 app.listen(process.env.PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${process.env.PORT}`);
 });
-
-// app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-//   // console.error(err.stack || err);
-//   res.status(500).json({ error: "Internal Server Error pipipi" });
-// });

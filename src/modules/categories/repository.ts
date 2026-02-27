@@ -1,4 +1,5 @@
 import { pool } from "../../config/database";
+import type { UpdateCategoryDTO } from "../../lib/dtos";
 import type { Category, CreateCategoryData } from "../../lib/types";
 
 export const createCategory = async (
@@ -22,6 +23,7 @@ export const getAllCategories = async (
     ORDER BY created_at DESC`,
     [user_id]
   );
+
   return rows;
 };
 
@@ -33,12 +35,13 @@ export const getCategoryById = async (
     "SELECT * FROM categories WHERE id = $1 AND user_id = $2",
     [id, user_id]
   );
+
   return rows[0] || null;
 };
 
 export const updateCategory = async (
   id: number,
-  body: { name?: string; description?: string; color?: string },
+  body: UpdateCategoryDTO,
   user_id: number
 ): Promise<Category | null> => {
   const updates = [];
@@ -67,6 +70,7 @@ export const updateCategory = async (
   const query = `UPDATE categories SET ${updates.join(", ")} WHERE id = $${paramIndex} AND user_id = $${paramIndex + 1} RETURNING *`;
 
   const { rows } = await pool.query(query, values);
+
   return rows[0] || null;
 };
 
@@ -78,5 +82,6 @@ export const deleteCategory = async (
     "DELETE FROM categories WHERE id = $1 AND user_id = $2 RETURNING id",
     [id, user_id]
   );
+
   return rows[0] || null;
 };

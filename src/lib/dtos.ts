@@ -37,3 +37,27 @@ export type CategoryDTO = {
   created_at: Date;
   updated_at: Date;
 };
+
+export type CreateTodoDTO = {
+  title: string;
+  description: string;
+  completed: boolean;
+  category_id: number;
+};
+
+export type TodoDTO = {
+  id: number;
+  title: string;
+  description: string | null;
+  completed: boolean;
+  category_id: number | null;
+  created_at: Date;
+  updated_at: Date;
+};
+
+export type UpdateTodoDTO = {
+  title?: string | undefined;
+  description?: string | undefined;
+  completed?: boolean | undefined;
+  category_id?: number | undefined;
+};

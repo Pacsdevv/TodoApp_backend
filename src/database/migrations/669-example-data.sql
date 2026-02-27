@@ -1,7 +1,7 @@
 INSERT INTO users (name, email, password) VALUES
-  ('Pobs Dev', 'pobs@gmail.com', '123'),
-  ('Isaac Dev', 'isaac@gmail.com', '666'),
-  ('Shamir Dev', 'shamir@gmail.com', '69420')
+  ('Pobs Dev', 'pobs@gmail.com', 'pepito123'),
+  ('Isaac Dev', 'isaac@gmail.com', 'pepito123'),
+  ('Shamir Dev', 'shamir@gmail.com', 'pepito123')
   ON CONFLICT (email) DO NOTHING;
 
 INSERT INTO categories (name, description, user_id) VALUES

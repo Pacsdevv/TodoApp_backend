@@ -19,6 +19,25 @@ export type Category = {
   updated_at: Date;
 };
 
+export type Todo = {
+  id: number;
+  title: string;
+  description: string | null;
+  completed: boolean;
+  user_id: number;
+  category_id: number | null;
+  created_at: Date;
+  updated_at: Date;
+};
+
+export type CreateTodoData = {
+  title: string;
+  description?: string | undefined;
+  completed?: boolean;
+  user_id: number;
+  category_id?: number | undefined;
+};
+
 export type CreateCategoryData = {
   name: string;
   description?: string;
